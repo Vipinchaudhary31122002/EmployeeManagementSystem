@@ -135,10 +135,46 @@ class Employee:
         ShowAllButton.grid(row=0, column=4, padx=10 , pady=3)
 
         # Employee Table
-        EmployeeTableFrame = Frame(LowerFrame, bd=2, relief=RIDGE, bg="white")
+        EmployeeTableFrame = Frame(LowerFrame, bd=3, relief=RIDGE, bg="white")
         EmployeeTableFrame.place(x=10, y=45, width=1300, height=300)
-
-
+        ScrollX = ttk.Scrollbar(EmployeeTableFrame, orient=HORIZONTAL)
+        ScrollY = ttk.Scrollbar(EmployeeTableFrame, orient=VERTICAL)
+        self.EmployeeTable = ttk.Treeview(EmployeeTableFrame, columns=("Dep", "Name", "Desig", "Email", "Add", "Married", "DOB", "DOJ", "IDProof", "IDProofNo", "Gender", "Phone", "Country", "Salary",), xscrollcommand=ScrollX.set, yscrollcommand=ScrollY.set)
+        ScrollX.pack(side=BOTTOM, fill=X)
+        ScrollY.pack(side=RIGHT, fill=Y)
+        ScrollX.config(command=self.EmployeeTable.xview)
+        ScrollY.config(command=self.EmployeeTable.yview)
+        self.EmployeeTable.heading("Dep", text="Department Name")
+        self.EmployeeTable.heading("Name", text="Employee Name")
+        self.EmployeeTable.heading("Desig", text="Designation")
+        self.EmployeeTable.heading("Email", text="Email")
+        self.EmployeeTable.heading("Add", text="Address")
+        self.EmployeeTable.heading("Married", text="Marital Status")
+        self.EmployeeTable.heading("DOB", text="Date of Birth")
+        self.EmployeeTable.heading("DOJ", text="Date of Joining")
+        self.EmployeeTable.heading("IDProof", text="ID Proof")
+        self.EmployeeTable.heading("IDProofNo", text="ID Proof Number")
+        self.EmployeeTable.heading("Gender", text="Gender")
+        self.EmployeeTable.heading("Phone", text="Phone number")
+        self.EmployeeTable.heading("Country", text="Country")
+        self.EmployeeTable.heading("Salary", text="Salary")
+        
+        self.EmployeeTable["show"] = "headings"
+        self.EmployeeTable.column("Dep", width=150)
+        self.EmployeeTable.column("Name", width=150)
+        self.EmployeeTable.column("Desig", width=150)
+        self.EmployeeTable.column("Email", width=150)
+        self.EmployeeTable.column("Add", width=150)
+        self.EmployeeTable.column("Married", width=150)
+        self.EmployeeTable.column("DOB", width=150)
+        self.EmployeeTable.column("DOJ", width=150)
+        self.EmployeeTable.column("IDProof", width=150)
+        self.EmployeeTable.column("IDProofNo", width=150)
+        self.EmployeeTable.column("Gender", width=150)
+        self.EmployeeTable.column("Phone", width=150)
+        self.EmployeeTable.column("Country", width=150)
+        self.EmployeeTable.column("Salary", width=150)
+        self.EmployeeTable.pack(fill=BOTH, expand=1)
 
 
 if __name__=="__main__":
