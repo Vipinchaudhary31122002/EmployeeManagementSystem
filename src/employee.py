@@ -1,11 +1,29 @@
 from tkinter import *
 from tkinter import ttk
+import mysql.connector
+from tkinter import messagebox
 
 class Employee:
     def __init__(self, root):
         self.root = root
         self.root.geometry("1366x768")
         self.root.title("EmployeeManagementSystem")
+
+        # text variable which store input taken through input fields
+        self.DepartmentVariable = StringVar()
+        self.NameVariable = StringVar()
+        self.DesignationVariable = StringVar()
+        self.EmailVariable = StringVar()
+        self.AddressVariable = StringVar()
+        self.MarriedVariable = StringVar()
+        self.DOBVariable = StringVar()
+        self.DOJVariable = StringVar()
+        self.IDProofVariable = StringVar()
+        self.IDProofComboVariable = StringVar()
+        self.GenderVariable = StringVar()
+        self.PhoneVariable = StringVar()
+        self.CountryVariable = StringVar()
+        self.SalaryVariable = StringVar()
         
         # Label
         LabelTitle = Label(self.root, text="Employee Management System", font=("times new roman", 37, 'bold'), fg="darkblue", bg="white")
@@ -25,51 +43,51 @@ class Employee:
 
         # Label and Entry field in Upper frame
         # Department Name
-        LabelDepartment = Label(FormFrame, text="Department", font=("arial", 11, 'bold'), bg="white")
+        LabelDepartment = Label(FormFrame,text="Department", font=("arial", 11, 'bold'), bg="white")
         LabelDepartment.grid(row=0, column=0, padx=9, sticky=W)
-        ComboDepartment = ttk.Combobox(FormFrame, font=("arial", 11), width=25, state="readonly")
+        ComboDepartment = ttk.Combobox(FormFrame, textvariable = self.DepartmentVariable, font=("arial", 11), width=25, state="readonly")
         ComboDepartment["value"] = ('Select Department', 'HR', 'Software', 'Engineering', 'R&D', 'Management')
         ComboDepartment.current(0)
         ComboDepartment.grid(row=0, column =1, padx=9, pady=10, sticky=W)
         # Employee Name
         LabelName = Label(FormFrame, font=("arial", 11, 'bold'), text="Name:", bg="white")
         LabelName.grid(row=0, column=2, sticky=W, padx=9, pady=7)
-        TextName=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextName=ttk.Entry(FormFrame, textvariable = self.NameVariable, width=25, font=("arial", 11))
         TextName.grid(row=0, column=3, padx=9, pady=7)
         # Designition
         LabelDesignition = Label(FormFrame, font=("arial", 11, 'bold'), text="Designition:", bg="white")
         LabelDesignition.grid(row=1, column=0, sticky=W, padx=9, pady=7)
-        TextDesignition=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextDesignition=ttk.Entry(FormFrame, textvariable = self.DesignationVariable, width=25, font=("arial", 11))
         TextDesignition.grid(row=1, column=1, padx=9, pady=7)
         # Email
         LabelEmail = Label(FormFrame, font=("arial", 11, 'bold'), text="Email:", bg="white")
         LabelEmail.grid(row=1, column=2, sticky=W, padx=9, pady=7)
-        TextEmail=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextEmail=ttk.Entry(FormFrame, textvariable = self.EmailVariable, width=25, font=("arial", 11))
         TextEmail.grid(row=1, column=3, padx=9, pady=7)
         # Address
         LabelAddress = Label(FormFrame, font=("arial", 11, 'bold'), text="Address:", bg="white")
         LabelAddress.grid(row=2, column=0, sticky=W, padx=9, pady=7)
-        TextAddress=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextAddress=ttk.Entry(FormFrame, textvariable = self.AddressVariable, width=25, font=("arial", 11))
         TextAddress.grid(row=2, column=1, padx=9, pady=7)
         # MaritalStatus
         LabelMaritalStatus = Label(FormFrame, font=("arial", 11, 'bold'), text="Marital Status:", bg="white")
         LabelMaritalStatus.grid(row=2, column=2, sticky=W, padx=9, pady=7)
-        ComboMaritalStatus = ttk.Combobox(FormFrame, font=("arial", 11), width=25, state="readonly")
+        ComboMaritalStatus = ttk.Combobox(FormFrame, textvariable = self.MarriedVariable, font=("arial", 11), width=25, state="readonly")
         ComboMaritalStatus["value"] = ('Married','Unmarried')
         ComboMaritalStatus.current(0)
         ComboMaritalStatus.grid(row=2, column=3, padx=9, pady=10, sticky=W)
         # Date of Birth
         LabelDateOfBirth = Label(FormFrame, font=("arial", 11, 'bold'), text="Date of birth:", bg="white")
         LabelDateOfBirth.grid(row=3, column=0, sticky=W, padx=9, pady=7)
-        TextDateOfBirth=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextDateOfBirth=ttk.Entry(FormFrame, textvariable = self.DOBVariable, width=25, font=("arial", 11))
         TextDateOfBirth.grid(row=3, column=1, padx=9, pady=7)
         # Date of joining
         LabelDateOfJoining = Label(FormFrame, font=("arial", 11, 'bold'), text="Date of Joining:", bg="white")
         LabelDateOfJoining.grid(row=3, column=2, sticky=W, padx=9, pady=7)
-        TextDateOfJoining=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextDateOfJoining=ttk.Entry(FormFrame, textvariable = self.DOJVariable, width=25, font=("arial", 11))
         TextDateOfJoining.grid(row=3, column=3, padx=9, pady=7)
         # ID Proof
-        ComboIDProof = ttk.Combobox(FormFrame, font=("arial", 11), width=15, state="readonly")
+        ComboIDProof = ttk.Combobox(FormFrame, textvariable = self.IDProofComboVariable, font=("arial", 11), width=15, state="readonly")
         ComboIDProof["value"] = ('Select ID Proof','PAN CARD', 'ADHAR CARD', 'DRIVING LICENSE')
         ComboIDProof.current(0)
         ComboIDProof.grid(row=4, column=0, padx=9, pady=10, sticky=W)
@@ -78,24 +96,24 @@ class Employee:
         # Gender
         LabelGender = Label(FormFrame, font=("arial", 11, 'bold'), text="Gender:", bg="white")
         LabelGender.grid(row=4, column=2, sticky=W, padx=9, pady=7)
-        ComboGender = ttk.Combobox(FormFrame, font=("arial", 11), width=25, state="readonly")
+        ComboGender = ttk.Combobox(FormFrame,textvariable = self.GenderVariable, font=("arial", 11), width=25, state="readonly")
         ComboGender["value"] = ('Male','Female', 'Other')
         ComboGender.current(0)
         ComboGender.grid(row=4, column=3, padx=9, pady=10, sticky=W)
         # Phone number
         LabelPhoneNumber = Label(FormFrame, font=("arial", 11, 'bold'), text="Phone No:", bg="white")
         LabelPhoneNumber.grid(row=0, column=4, sticky=W, padx=9, pady=7)
-        TextPhoneNumber=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextPhoneNumber=ttk.Entry(FormFrame, textvariable = self.PhoneVariable, width=25, font=("arial", 11))
         TextPhoneNumber.grid(row=0, column=5, padx=9, pady=7)
         # Country
         LabelCountry = Label(FormFrame, font=("arial", 11, 'bold'), text="Country:", bg="white")
         LabelCountry.grid(row=1, column=4, sticky=W, padx=9, pady=7)
-        TextCountry=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextCountry=ttk.Entry(FormFrame, textvariable = self.CountryVariable, width=25, font=("arial", 11))
         TextCountry.grid(row=1, column=5, padx=9, pady=7)
         # CTC
         LabelCTC = Label(FormFrame, font=("arial", 11, 'bold'), text="CTC:", bg="white")
         LabelCTC.grid(row=2, column=4, sticky=W, padx=9, pady=7)
-        TextCTC=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextCTC=ttk.Entry(FormFrame, textvariable = self.SalaryVariable, width=25, font=("arial", 11))
         TextCTC.grid(row=2, column=5, padx=9, pady=7)
 
         # Button frame
@@ -175,6 +193,16 @@ class Employee:
         self.EmployeeTable.column("Country", width=150)
         self.EmployeeTable.column("Salary", width=150)
         self.EmployeeTable.pack(fill=BOTH, expand=1)
+
+    # function declaration for create, update, clear and delete data
+    def AddData(self):
+        if self.DepartmentVariable.get()=="" or self.EmailVariable.get()=="":
+            messagebox.showerror("Error", "All fields are required")
+        else: 
+            try:
+                conn=mysql.connector.connect(host = "localhost", username="root", password="root", database="EMS")
+                cursor = conn.cursor()
+                cursor.execute("insert into EMS value()")
 
 
 if __name__=="__main__":

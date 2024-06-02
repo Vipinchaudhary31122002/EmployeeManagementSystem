@@ -1,6 +1,0 @@
-Package    Version
----------- -------
-colorama   0.4.6
-pip        22.0.2
-setuptools 59.6.0
-watchdog   4.0.1
