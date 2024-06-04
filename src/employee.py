@@ -91,7 +91,7 @@ class Employee:
         ComboIDProof["value"] = ('Select ID Proof','PAN CARD', 'ADHAR CARD', 'DRIVING LICENSE')
         ComboIDProof.current(0)
         ComboIDProof.grid(row=4, column=0, padx=9, pady=10, sticky=W)
-        TextIDProof=ttk.Entry(FormFrame, width=25, font=("arial", 11))
+        TextIDProof=ttk.Entry(FormFrame, textvariable = self.IDProofVariable, width=25, font=("arial", 11))
         TextIDProof.grid(row=4, column=1, padx=9, pady=7)
         # Gender
         LabelGender = Label(FormFrame, font=("arial", 11, 'bold'), text="Gender:", bg="white")
@@ -120,7 +120,7 @@ class Employee:
         ButtonFrame = Frame(UpperFrame, bd=2, relief=RIDGE, bg="white")
         ButtonFrame.place(x=1100, y=0, width=205, height=195)
 
-        AddBtn = Button(ButtonFrame, text="Save", font=("arial", 15, 'bold'), width=15, bg="blue", fg="white")
+        AddBtn = Button(ButtonFrame, text="Save", command = self.AddData, font=("arial", 15, 'bold'), width=15, bg="blue", fg="white")
         AddBtn.grid(row=0, column=0, padx=5, pady=5)
         UpdateBtn = Button(ButtonFrame, text="Update", font=("arial", 15, 'bold'), width=15, bg="blue", fg="white")
         UpdateBtn.grid(row=1, column=0, padx=5, pady=5)
@@ -196,13 +196,31 @@ class Employee:
 
     # function declaration for create, update, clear and delete data
     def AddData(self):
-        if self.DepartmentVariable.get()=="" or self.EmailVariable.get()=="":
+        if self.IDProofComboVariable.get() == "" or self.IDProofVariable.get() == "" or self.NameVariable.get() == "":
             messagebox.showerror("Error", "All fields are required")
-        else: 
+        else:
             try:
-                conn=mysql.connector.connect(host = "localhost", username="root", password="root", database="EMS")
-                cursor = conn.cursor()
-                cursor.execute("insert into EMS value()")
+                conn = mysql.connector.connect(host="localhost", username="root", password="root", database="EMS")
+                with conn.cursor() as cursor:
+                    sql = """
+                        INSERT INTO EMS (Department, Name, Designation, Email, Address, MarriedStatus, DOB, DOJ, ID_Proof, ID_Proof_Type, Gender, Phone, Country, Salary) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """
+                    cursor.execute(sql, (
+                        self.DepartmentVariable.get(), self.NameVariable.get(), self.DesignationVariable.get(),
+                        self.EmailVariable.get(), self.AddressVariable.get(), self.MarriedVariable.get(),
+                        self.DOBVariable.get(), self.DOJVariable.get(), self.IDProofVariable.get(),
+                        self.IDProofComboVariable.get(), self.GenderVariable.get(), self.PhoneVariable.get(),
+                        self.CountryVariable.get(), self.SalaryVariable.get()
+                    ))
+                    conn.commit()
+                messagebox.showinfo("Success", "Employee data has been added", parent=self.root)
+            except mysql.connector.Error as err:
+                messagebox.showerror("Error", f"Database error: {err}", parent=self.root)
+            except Exception as e:
+                messagebox.showerror("Error", f"Error: {e}", parent=self.root)
+            finally:
+                conn.close()
 
 
 if __name__=="__main__":
